@@ -1,25 +1,19 @@
-import express from "express";
-import path from "path";
-
+import express from 'express';
 const app = express();
-const publicPath = path.resolve("public");
-app.use(express.static(publicPath))
 
-app.get("/", (req, resp) => {
-    const absPath = path.resolve("view/home.html")
-    resp.sendFile(absPath)
-});
-app.get("/login", (req, resp) => {
-    const absPath = path.resolve("view/login.html")
-    resp.sendFile(absPath)
-});
-app.get("/about", (req, resp) => {
-    const absPath = path.resolve("view/about.html")
-    resp.sendFile(absPath)
+
+app.use((req,resp,next)=>{
+    console.log("User is accessing the route:"+req.url);
+    next();
 });
 
-app.use((req, resp) => {
-    //resp status code 404 means not found and we are sending the 404.html file to the client
-    resp.status(404).sendFile(path.resolve("view/404.html"))
+app.get('/',(req,resp)=>{
+    resp.send("Home page")
 })
-app.listen(3000)
+app.get('/users',(req,resp)=>{
+    resp.send("Users page")
+})
+app.get('/products',(req,resp)=>{
+    resp.send("Products page")
+})
+app.listen(3200);
