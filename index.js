@@ -1,46 +1,25 @@
-import express from "express"
-import home from "./pages/home.js"
-import login from "./pages/login.js"
-import submit from "./pages/submit.js"
-const app = express()
+import express from "express";
+import path from "path";
+
+const app = express();
+const publicPath = path.resolve("public");
+app.use(express.static(publicPath))
 
 app.get("/", (req, resp) => {
-    resp.send(home())
-})
+    const absPath = path.resolve("view/home.html")
+    resp.sendFile(absPath)
+});
 app.get("/login", (req, resp) => {
-    resp.send(login())
+    const absPath = path.resolve("view/login.html")
+    resp.sendFile(absPath)
+});
+app.get("/about", (req, resp) => {
+    const absPath = path.resolve("view/about.html")
+    resp.sendFile(absPath)
+});
+
+app.use((req, resp) => {
+    //resp status code 404 means not found and we are sending the 404.html file to the client
+    resp.status(404).sendFile(path.resolve("view/404.html"))
 })
-
-//since there is method post in form tag we have to use app.post here instead of app.get
-app.post("/submit", (req, resp) => {
-    resp.send(submit)
-
-})
-
-app.listen(3200)
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const express = require('express');
-// const app = express();
-// app.get("",(req,resp)=>{
-//     resp.send("<h1> Basic node js example </h1>");
-// })
-// app.get("/about",(req,resp)=>{
-//     resp.send("<h1> ABOUT </h1>");
-// })
-// app.get("/contact",(req,resp)=>{
-//     resp.send("<h1> ABOUT </h1>");
-// })
-
-// app.listen(5600);
+app.listen(3000)
